@@ -1,5 +1,3 @@
-.PHONY: apply config
-
 create:
 	gcloud --project ${PROJECT_ID} container clusters create ${CLUSTER_NAME} --zone asia-northeast1-a --network ${NETWORK}
 
