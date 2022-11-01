@@ -1,10 +1,11 @@
 .PHONY: apply config
 
-PROJECT_ID := ""
-CLUSTER_NAME := ""
+create:
+	gcloud --project ${PROJECT_ID} container clusters create ${CLUSTER_NAME} --zone asia-northeast1-a --network ${NETWORK}
+
+get-credentials:
+	gcloud --project ${PROJECT_ID} container clusters get-credentials ${CLUSTER_NAME} --zone asia-northeast1-a
 
 apply:
 	kubectl apply --prune --all -f ./gke.yaml
 
-config:
-	gcloud container clusters get-credentials ${CLUSTER_NAME} --zone asia-northeast1-a --project ${PROJECT_ID}
