@@ -1,6 +1,8 @@
 #!/bin/bash
 
-wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+if [ ! -f jammy-server-cloudimg-amd64.img  ]; then
+  wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+fi
 qm create 9001 --memory 2048 --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-pci
 qm set 9001 --scsi0 ceph-storage:0,import-from=$PWD/jammy-server-cloudimg-amd64.img
 
