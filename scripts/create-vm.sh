@@ -23,24 +23,27 @@ qm resize 9002 scsi0 50G
 qm set 9002 --cores 4 --memory 16384
 qm template 9002
 
-qm clone 9001 101 --name k8s-cp01
+qm clone 9001 101 --name k8s-cp01 --target nipogi01
 qm set 101 --ipconfig0 "ip=192.168.11.21/24,gw=192.168.11.1"
-qm clone 9001 102 --name k8s-cp02
+qm clone 9001 102 --name k8s-cp02 --target nipogi02
 qm set 102 --ipconfig0 "ip=192.168.11.22/24,gw=192.168.11.1"
-qm clone 9001 103 --name k8s-cp03
+qm clone 9001 103 --name k8s-cp03 --target nipogi03
 qm set 103 --ipconfig0 "ip=192.168.11.23/24,gw=192.168.11.1"
-qm clone 9002 201 --name k8s-wn01
+qm clone 9002 201 --name k8s-wn01 --target nipogi01
 qm set 201 --ipconfig0 "ip=192.168.11.24/24,gw=192.168.11.1"
-qm clone 9002 202 --name k8s-wn02
+qm clone 9002 202 --name k8s-wn02 --target nipogi02
 qm set 202 --ipconfig0 "ip=192.168.11.25/24,gw=192.168.11.1"
-qm clone 9002 203 --name k8s-wn03
+qm clone 9002 203 --name k8s-wn03 --target nipogi03
 qm set 203 --ipconfig0 "ip=192.168.11.26/24,gw=192.168.11.1"
 
-for i in 101 102 103 201 202 203; do
-  qm start $i
+for i in 102 202; do
+  ssh 192.168.11.12 qm start $i
 done
 
-qm migrate 102 nipogi02 --online
-qm migrate 202 nipogi02 --online
-qm migrate 103 nipogi03 --online
-qm migrate 203 nipogi03 --online
+for i in 103 203; do
+  ssh 192.168.11.12 qm start $i
+done
+
+for i in 101 201; do
+  qm start $i
+done
